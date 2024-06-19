@@ -6,3 +6,5 @@ secondo le nuove teorie complottistiche l'economia cercava un pulsante di riavvi
 ------------------
 
 https://youtu.be/10VDaVjQjWQ?si=xrwN-UxrLaOhdzXN
+
+https://youtu.be/MBfGkso32Uw?si=7xrS5XgoRKICITrc
