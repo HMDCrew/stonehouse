@@ -1,0 +1,1 @@
+/home/hmd/Local Sites/stonehouse/app/public/wp-content/plugins/query-monitor/wp-content/db.php

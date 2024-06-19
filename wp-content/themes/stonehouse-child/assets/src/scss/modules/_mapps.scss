@@ -1,0 +1,154 @@
+.maps {
+    position: relative;
+
+    #stonemap {
+        height: 80vh;
+        outline: 0 !important;
+
+        .leaflet-popup {
+
+            .leaflet-popup-content-wrapper, .leaflet-popup-tip {
+                box-shadow: 0 3px 14px -7px rgba(0, 0, 0, 0.4);
+            }
+
+            .leaflet-popup-content {
+                line-height: initial;
+                margin: 13px 0;
+                width: auto !important;
+                min-width: 130px;
+
+                .popup-items {
+                    display: block;
+    
+                    .btn-add-house {
+                        cursor: pointer;
+                        width: 100%;
+                        outline: 0 !important;
+    
+                        .save-label {
+                            font-size: 12px;
+                            margin: 7px 0 0 0;
+                            font-weight: 600;
+                            letter-spacing: 12px;
+                            text-indent: 12px;
+                            text-transform: uppercase;
+                        }
+
+                        &.loading {
+                            svg {
+                                border: 1px solid rgba(0, 0, 0, 0.2);
+                                border-left-color: #5cb85c;
+                                animation: loader-spin 1.2s infinite linear;
+                                position: relative;
+                                display: inline-block;
+                                vertical-align: top;
+                                border-radius: 50%;
+    
+                                * {
+                                    opacity: 0;
+                                }
+                            }
+                        }
+
+                        &.loaded {
+                            position: relative;
+                            display: flex;
+                            align-items: center;
+                            flex-direction: column;
+
+                            &::before {
+                                content: '';
+                                height: 46px;
+                                width: 23px;
+                                border-right: 3px solid #5cb85c;
+                                border-top: 3px solid #5cb85c;
+                                transform: scaleX(-1) rotate(135deg);
+                                margin-bottom: 10px;
+                                margin-top: -10px;
+                            }
+
+                            svg {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+            }
+    
+            .leaflet-popup-close-button {
+                top: -6px;
+                right: -6px;
+                width: 25px;
+                height: 25px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: white;
+                border-radius: 50px;
+                box-shadow: 4px -4px 14px -9px #000000;
+                font: 20px Tahoma, Verdana, sans-serif;
+            }
+        }
+
+        .my-houses {
+            width: 19px;
+            height: 18px;
+            padding: 6px 5.5px;
+            background-color: white;
+
+            &:hover {
+                background-color: #f4f4f4;
+            }
+        }
+    }
+    
+    #mini-map {
+        cursor: pointer;
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 5vw;
+        height: 5vw;
+        border-radius: 1vw;
+    
+        @media screen and (max-width: 1024px) {
+            & {
+                bottom: 40px;
+                right: 40px;
+                width: 10vw;
+                height: 10vw;
+            }
+        }
+    }
+}
+
+@keyframes loader-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+@keyframes checkmark {
+    0% {
+        height: 0;
+        width: 0;
+        opacity: 1;
+    }
+    20% {
+        height: 0;
+        width: 1.75em;
+        opacity: 1;
+    }
+    40% {
+        height: 3.5em;
+        width: 1.75em;
+        opacity: 1;
+    }
+    100% {
+        height: 3.5em;
+        width: 1.75em;
+        opacity: 1;
+    }
+}
