@@ -13,3 +13,8 @@
 [19-Jun-2024 19:12:06 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
 [19-Jun-2024 19:12:12 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
 [19-Jun-2024 19:12:14 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
+[20-Jun-2024 19:37:26 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
+[20-Jun-2024 19:37:26 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
+[20-Jun-2024 19:37:26 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
+[20-Jun-2024 19:37:26 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
+[20-Jun-2024 19:37:34 UTC] PHP Warning:  mysqli_real_connect(): (HY000/2002): No such file or directory in /home/hmd/Local Sites/stonehouse/app/public/wp-includes/class-wpdb.php on line 1987
