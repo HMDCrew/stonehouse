@@ -212,7 +212,7 @@ export const init_map = (init, save_location) => {
     if( 'ontouchstart' in document.documentElement ) {
         map.on('contextmenu', (e) => set_marker(map, e.latlng, save_location))
     } else {
-        window.addEventListener('contextmenu', e => e.preventDefault());
+        map.addEventListener('contextmenu', e => e.preventDefault())
     }
 
 
@@ -226,7 +226,9 @@ export const init_map = (init, save_location) => {
             img.classList.add('leaflet-bar')
             img.classList.add('my-houses')
 
-            img.addEventListener('click', ev => {}, false)
+            img.addEventListener('click', ev => {
+                console.log('test')
+            }, false)
 
             return img
         }

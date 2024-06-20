@@ -94,12 +94,16 @@ if ( ! class_exists( 'HOMES_POST_TYPE_INIT' ) ) :
 
         public function save_stonehouse( $post_id ) {
 
-            if ( current_user_can( 'edit_posts' ) && ! empty( $_POST['description'] ) ) {
+            if ( current_user_can( 'edit_posts' ) ) {
 
-                $description = sanitize_text_field( $_POST['description'] );
-    
-                update_post_meta( $post_id, 'description', $description );
-                update_post_meta( $post_id, 'location', array( 'lat' => $_POST['coordinate']['lat'], 'lng' => $_POST['coordinate']['lng'],  ) );
+                if ( ! empty( $_POST['description'] ) ) {
+                    $description = sanitize_text_field( $_POST['description'] );
+                    update_post_meta( $post_id, 'description', $description );
+                }
+
+                if ( ! empty( $_POST['coordinate'] ) ) {
+                    update_post_meta( $post_id, 'location', array( 'lat' => $_POST['coordinate']['lat'], 'lng' => $_POST['coordinate']['lng'],  ) );
+                }
             }
             
             return $post_id;
