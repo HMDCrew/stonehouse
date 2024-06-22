@@ -140,6 +140,7 @@
         box-sizing: border-box;
         z-index: 10000;
         overflow: auto;
+        user-select: none;
         transition: all .3s;
 
         .house {
@@ -158,7 +159,6 @@
                     font-size: 20px;
                     font-weight: 500;
                     line-height: 36px;
-                    outline: unset;
                 }
 
                 .location {
@@ -189,6 +189,7 @@
                     .title,
                     .lat span,
                     .lng span {
+                        outline: unset;
                         font-weight: 600;
                     }
                 }
@@ -202,11 +203,14 @@
 
                 .btn {
                     cursor: pointer;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
                     border-radius: 6px;
-                    padding: 6px 12px;
                     margin: 4px 2px;
-                    line-height: 24px;
                     transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+                    width: 40px;
+                    height: 40px;
                 }
                 
                 .edit {
@@ -225,10 +229,24 @@
                     }
                 }
 
+                .save {
+                    background-color: #198754;
+
+                    &:hover {
+                        background-color: #157347;
+                    }
+                }
 
                 svg {
                     path {
                         stroke: white;
+                    }
+
+                    &.save-icon {
+
+                        path {
+                            fill: white;
+                        }
                     }
                 }
             }

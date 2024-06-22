@@ -201,6 +201,8 @@ export const init_map = (init, save_location) => {
                 const title = lock_hover.querySelector('.title')
                 const lat = lock_hover.querySelector('.lat span')
                 const lng = lock_hover.querySelector('.lng span')
+                const btn_save = document.querySelector('.btn.save:not(.d-none)')
+                const btn_edit = document.querySelector('.btn.edit.d-none')
 
                 title.removeAttribute('contenteditable', true)
                 lat.removeAttribute('contenteditable', true)
@@ -208,14 +210,17 @@ export const init_map = (init, save_location) => {
 
                 lock_hover.classList.remove('lock_hover')
                 lock_hover.classList.remove('editable')
+                btn_save.classList.add('d-none')
+                btn_edit.classList.remove('d-none')
             }
         }
 
-        const edit_house = ( house_item ) => {
+        const edit_house = ( btn, house_item ) => {
             
             deactivate_old_house_edit()
 
             const info = house_item.querySelector('.info-container')
+            const btn_save = house_item.querySelector('.btn.save')
             const title = info.querySelector('.title')
             const lat = info.querySelector('.lat span')
             const lng = info.querySelector('.lng span')
@@ -233,15 +238,18 @@ export const init_map = (init, save_location) => {
             }
 
 
+            // save d-none
             info.classList.toggle('lock_hover')
             info.classList.toggle('editable')
+            btn.classList.toggle('d-none')
+            btn_save.classList.toggle('d-none')
         }
 
-        const delete_house = ( house_item ) => {
+        const delete_house = ( btn, house_item ) => {
 
         }
 
-        btns_edits.forEach( btn => btn.addEventListener( 'click', ev => edit_house( btn.closest('.house') ) ) )
-        btns_delets.forEach( btn => btn.addEventListener( 'click', ev => delete_house( btn.closest('.house') ) ) )
+        btns_edits.forEach( btn => btn.addEventListener( 'click', ev => edit_house( btn, btn.closest('.house') ) ) )
+        btns_delets.forEach( btn => btn.addEventListener( 'click', ev => delete_house( btn, btn.closest('.house') ) ) )
     }
 }
