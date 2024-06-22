@@ -3,33 +3,14 @@ import "leaflet.locatecontrol/dist/L.Control.Locate.min.css"
 import L from "leaflet"
 import 'leaflet/dist/leaflet.css'
 
-import { reder_el, simulate_click } from "../utils/helpers"
+import { reder_el } from "../utils/helpers"
 import house from '../../images/houses-svgrepo.svg'
 import { leaflet } from "../constants/leaflet"
+import { sendHttpReq } from "../utils/api"
 
 let point_marker
 let position_marker
 let popup
-
-const add_layers = (map, miniature) => {
-
-    const big_map = L.tileLayer(leaflet.topografica, {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a> | Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-        subdomains: 'abcd',
-        maxZoom: 18
-    }).addTo(map)
-
-
-    L.tileLayer(leaflet.roards, {
-        subdomains: 'abcd',
-        maxZoom: 18
-    }).addTo(map)
-
-    return {
-        map: big_map,
-        mini: L.tileLayer(leaflet.geografica).addTo(miniature),
-    }
-}
 
 const popup_marker_content = (map, save_location, latlng) => {
 
@@ -248,10 +229,50 @@ export const init_map = (init, save_location) => {
 
         const delete_house = ( btn, house_item ) => {
 
+            const house_id = house_item.getAttribute('house-id')
+
+            sendHttpReq({
+                url: stonehouse_data.json_url + 'delete-house',
+                data: { house_id },
+                method: 'POST',
+                headers: {
+                    'X-WP-Nonce': stonehouse_data.nonce
+                },
+            }).then(res => {
+
+                res = JSON.parse(res)
+
+                console.log(res)
+            })
         }
 
         const save_house = ( btn, house_item ) => {
 
+            const house_id = house_item.getAttribute('house-id')
+            const title = house_item.querySelector('.title')
+            const lat = house_item.querySelector('.lat')
+            const lng = house_item.querySelector('.lng')
+
+            sendHttpReq({
+                url: stonehouse_data.json_url + 'update-house',
+                data: {
+                    house_id,
+                    title: title.textContent,
+                    location: {
+                        lat: lat.getAttribute('lat'),
+                        lng: lng.getAttribute('lng')
+                    }
+                },
+                method: 'POST',
+                headers: {
+                    'X-WP-Nonce': stonehouse_data.nonce
+                },
+            }).then(res => {
+
+                res = JSON.parse(res)
+
+                console.log(res)
+            })
         }
 
         btns_edits.forEach( btn => btn.addEventListener( 'click', ev => edit_house( btn, btn.closest('.house') ) ) )

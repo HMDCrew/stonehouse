@@ -36,6 +36,26 @@ if ( ! class_exists( 'HOMES_API_ROUTES' ) ) :
 					'user_id'  => get_current_user_id(),
 				)
 			);
+
+			$server->register_route(
+				'rest-api-wordpress',
+				'/update-house',
+				array(
+					'methods'  => 'POST',
+					'callback' => array( $this, 'update_house' ),
+					'user_id'  => get_current_user_id(),
+				)
+			);
+
+			$server->register_route(
+				'rest-api-wordpress',
+				'/delete-house',
+				array(
+					'methods'  => 'POST',
+					'callback' => array( $this, 'delete_house' ),
+					'user_id'  => get_current_user_id(),
+				)
+			);
 		}
 
 
@@ -117,6 +137,86 @@ if ( ! class_exists( 'HOMES_API_ROUTES' ) ) :
 				),
 			);
         }
+
+
+        public function update_house( \WP_REST_Request $request ) {
+
+            $params   = $request->get_params();
+			$attr     = $request->get_attributes();
+            $user_id  = ( ! empty( $attr['user_id'] ) ? (int) preg_replace( '/[^0-9]/i', '', $attr['user_id'] ) : 0 );
+			$house_id = ( ! empty( $params['house_id'] ) ? (int) preg_replace( '/[^0-9]/i', '', $params['house_id'] ) : 0 );
+			$title    = ( ! empty( $params['title'] ) ? preg_replace( '/[^a-zA-Z0-9\s\@\!\?\,\.\-\_]/i', '', $params['title'] ) : 'new house' );
+
+			if ( $user_id && $house_id && (int) get_post_field( 'post_author', $house_id ) === $user_id ) {
+				
+				$location = (
+					! empty( $params['location'] )
+					? $this->regex_applied_array( '/[^0-9\.]/i', $params['location'] )
+					: array()
+				);
+
+				wp_update_post(
+					array(
+						'ID'           => $house_id,
+						'post_title'   => $title,
+						'meta_input'   => array(
+							'location' => array(
+								'lat'  => $location['lat'],
+								'lng'  => $location['lng']
+							)
+						),
+					)
+				);
+
+				wp_send_json(
+					array(
+						'status'  => 'success',
+						'message' => array(
+							'title'    => $title,
+							'location' => array(
+								'lat'  => $location['lat'],
+								'lng'  => $location['lng']
+							)
+						),
+					),
+				);
+			}
+
+			wp_send_json(
+				array(
+					'status'  => 'error',
+					'message' => 'is not possible update this house',
+				),
+			);
+		}
+
+
+        public function delete_house( \WP_REST_Request $request ) {
+
+            $params   = $request->get_params();
+			$attr     = $request->get_attributes();
+            $user_id  = ( ! empty( $attr['user_id'] ) ? (int) preg_replace( '/[^0-9]/i', '', $attr['user_id'] ) : 0 );
+			$house_id = ( ! empty( $params['house_id'] ) ? (int) preg_replace( '/[^0-9]/i', '', $params['house_id'] ) : 0 );
+
+			if ( $user_id && $house_id && (int) get_post_field( 'post_author', $house_id ) === $user_id ) {
+				
+				wp_delete_post( $house_id );
+
+				wp_send_json(
+					array(
+						'status'  => 'success',
+						'message' => 'location has been removed',
+					),
+				);
+			}
+
+			wp_send_json(
+				array(
+					'status'  => 'error',
+					'message' => 'is not possible remove this location',
+				),
+			);
+		}
     }
 endif;
 
