@@ -14,8 +14,8 @@ list(
         <div class="info">
             <div class="title"><?php echo $house->post_title; ?></div>
             <div class="location">
-                <div class="lat" lat="<?php echo $location['lat'] ?>">lat: <?php echo $location['lat'] ?></div>
-                <div class="lng" lng="<?php echo $location['lng'] ?>">lng: <?php echo $location['lng'] ?></div>
+                <div class="lat" lat="<?php echo $location['lat'] ?>">lat: <span><?php echo $location['lat'] ?></span></div>
+                <div class="lng" lng="<?php echo $location['lng'] ?>">lng: <span><?php echo $location['lng'] ?></span></div>
             </div>
         </div>
 	</div>

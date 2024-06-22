@@ -140,7 +140,6 @@
         box-sizing: border-box;
         z-index: 10000;
         overflow: auto;
-
         transition: all .3s;
 
         .house {
@@ -149,23 +148,52 @@
             align-items: center;
             margin-bottom: 16px;
 
-            .title {
-                font-size: 20px;
-                font-weight: 500;
-                line-height: 24px;
-                margin-bottom: 8px;
-            }
+            .info-container {
 
-            .location {
-                display: flex;
-                font-size: 13px;
-                font-weight: 400;
-                line-height: 24px;
+                * {
+                    transition: all .3s;
+                }
 
-                .lat {
-                    margin-right: 14px;
+                .title {
+                    font-size: 20px;
+                    font-weight: 500;
+                    line-height: 36px;
+                    outline: unset;
+                }
+
+                .location {
+                    display: flex;
+                    font-size: 13px;
+                    font-weight: 400;
+                    line-height: 24px;
+    
+                    .lat {
+                        margin-right: 14px;
+                    }
+                }
+
+                &.editable {
+                    .title,
+                    .lat,
+                    .lng {
+                        padding: 0 13px;
+                        background: #f3f3f3;
+                        border-radius: 4px;
+                    }
+
+                    .title,
+                    .location {
+                        margin-bottom: 25px;
+                    }
+
+                    .title,
+                    .lat span,
+                    .lng span {
+                        font-weight: 600;
+                    }
                 }
             }
+
 
             .actions {
                 display: flex;
@@ -217,7 +245,7 @@
                     transition: all .3s;
                 }
                 
-                &:hover {
+                &:not(.lock_hover):hover {
                     svg {
                         width: 20px;
                         margin-right: 12px;

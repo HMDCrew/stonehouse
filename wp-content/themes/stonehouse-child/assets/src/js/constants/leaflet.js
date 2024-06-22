@@ -74,13 +74,12 @@ export const leaflet = {
             subdomains: 'abcd',
             maxZoom: 18
         }).addTo(map)
-        
-        
+
         L.tileLayer(roards, {
             subdomains: 'abcd',
             maxZoom: 18
         }).addTo(map)
-        
+
         return {
             map: big_map,
             mini: L.tileLayer(geografica).addTo(miniature),

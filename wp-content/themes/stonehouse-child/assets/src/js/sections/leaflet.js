@@ -3,7 +3,7 @@ import "leaflet.locatecontrol/dist/L.Control.Locate.min.css"
 import L from "leaflet"
 import 'leaflet/dist/leaflet.css'
 
-import { reder_el } from "../utils/helpers"
+import { reder_el, simulate_click } from "../utils/helpers"
 import house from '../../images/houses-svgrepo.svg'
 import { leaflet } from "../constants/leaflet"
 
@@ -120,14 +120,14 @@ const update_miniature_map = (e, miniature) => {
 
 
 const switch_maps = (layers) => {
-    if (leaflet.selected == "topografica") {
+    if (leaflet.selected == 'topografica') {
         layers.mini.setUrl(leaflet.topografica)
         layers.map.setUrl(leaflet.geografica)
-        leaflet.selected = "geografica"
+        leaflet.selected = 'geografica'
     } else {
         layers.mini.setUrl(leaflet.geografica)
         layers.map.setUrl(leaflet.topografica)
-        leaflet.selected = "topografica"
+        leaflet.selected = 'topografica'
     }
 }
 
@@ -146,11 +146,11 @@ export const init_map = (init, save_location) => {
     })
     map_controlls(map, save_location)
 
-    map.on("zoom", (e) => update_miniature_map(e, miniature))
-    map.on("moveend", (e) => update_miniature_map(e, miniature))
-    map.on("resize", (e) => update_miniature_map(e, miniature))
+    map.on('zoom', (e) => update_miniature_map(e, miniature))
+    map.on('moveend', (e) => update_miniature_map(e, miniature))
+    map.on('resize', (e) => update_miniature_map(e, miniature))
 
-    miniature.on("click", ev => switch_maps(layers))
+    miniature.on('click', ev => switch_maps(layers))
 
     let mouse_has_moved
     let timerId
@@ -171,22 +171,77 @@ export const init_map = (init, save_location) => {
     map.on('mouseup', () => clearTimeout(timerId))
 
     // contextmenu is mobile version of ( mousedown, mousemove, mouseup )
-    if( 'ontouchstart' in document.documentElement ) {
+    if ( 'ontouchstart' in document.documentElement ) {
         map.on('contextmenu', (e) => set_marker(map, e.latlng, save_location))
     } else {
         map.addEventListener('contextmenu', e => e.preventDefault())
     }
 
-    
+
+    // Saved hauses
     const housed = document.querySelector('.housed')
 
     if ( housed ) {
         leaflet.addController({
             map: map,
             icon: house,
-            handler: ( ev ) => {
-                housed.parentNode.classList.toggle('show-houses')
-            }
+            handler: ( ev ) => housed.parentNode.classList.toggle('show-houses')
         })
+
+        const btns_edits = housed.querySelectorAll('.btn.edit')
+        const btns_delets = housed.querySelectorAll('.btn.delete')
+
+
+        const deactivate_old_house_edit = () => {
+
+            const lock_hover = document.querySelector('.info-container.lock_hover')
+
+            if ( lock_hover ) {
+
+                const title = lock_hover.querySelector('.title')
+                const lat = lock_hover.querySelector('.lat span')
+                const lng = lock_hover.querySelector('.lng span')
+
+                title.removeAttribute('contenteditable', true)
+                lat.removeAttribute('contenteditable', true)
+                lng.removeAttribute('contenteditable', true)
+
+                lock_hover.classList.remove('lock_hover')
+                lock_hover.classList.remove('editable')
+            }
+        }
+
+        const edit_house = ( house_item ) => {
+            
+            deactivate_old_house_edit()
+
+            const info = house_item.querySelector('.info-container')
+            const title = info.querySelector('.title')
+            const lat = info.querySelector('.lat span')
+            const lng = info.querySelector('.lng span')
+
+
+            if ( !info.classList.contains('lock_hover') ) {
+                title.setAttribute('contenteditable', true)
+                lat.setAttribute('contenteditable', true)
+                lng.setAttribute('contenteditable', true)
+                title.focus()
+            } else {
+                title.removeAttribute('contenteditable', true)
+                lat.removeAttribute('contenteditable', true)
+                lng.removeAttribute('contenteditable', true)
+            }
+
+
+            info.classList.toggle('lock_hover')
+            info.classList.toggle('editable')
+        }
+
+        const delete_house = ( house_item ) => {
+
+        }
+
+        btns_edits.forEach( btn => btn.addEventListener( 'click', ev => edit_house( btn.closest('.house') ) ) )
+        btns_delets.forEach( btn => btn.addEventListener( 'click', ev => delete_house( btn.closest('.house') ) ) )
     }
 }
