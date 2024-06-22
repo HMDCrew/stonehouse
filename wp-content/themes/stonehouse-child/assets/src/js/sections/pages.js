@@ -1,4 +1,4 @@
-import { init_map } from "../utils/leaflet"
+import { init_map } from "./leaflet"
 import { sendHttpReq } from "../utils/api"
 
 new Promise(async (resolve) => {
