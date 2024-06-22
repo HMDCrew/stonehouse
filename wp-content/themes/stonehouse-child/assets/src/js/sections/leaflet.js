@@ -137,7 +137,13 @@ export const init_map = (init, save_location) => {
     const map = leaflet.stonemap(init)
     const miniature = leaflet.miniMap(init)
 
-    const layers = add_layers(map, miniature)
+    const layers = leaflet.initLayers({
+        map,
+        miniature,
+        topografica: leaflet.topografica,
+        geografica: leaflet.geografica,
+        roards: leaflet.roards
+    })
     map_controlls(map, save_location)
 
     map.on("zoom", (e) => update_miniature_map(e, miniature))

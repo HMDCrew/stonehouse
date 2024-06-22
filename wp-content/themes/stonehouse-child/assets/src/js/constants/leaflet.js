@@ -65,5 +65,25 @@ export const leaflet = {
     
         L.control.watermark = (opts) => new L.Control.Watermark(opts)
         L.control.watermark({ position }).addTo(map)
+    },
+
+    initLayers: ({map, miniature, topografica, geografica, roards}) => {
+
+        const big_map = L.tileLayer(topografica, {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a> | Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+            subdomains: 'abcd',
+            maxZoom: 18
+        }).addTo(map)
+        
+        
+        L.tileLayer(roards, {
+            subdomains: 'abcd',
+            maxZoom: 18
+        }).addTo(map)
+        
+        return {
+            map: big_map,
+            mini: L.tileLayer(geografica).addTo(miniature),
+        }
     }
 }
