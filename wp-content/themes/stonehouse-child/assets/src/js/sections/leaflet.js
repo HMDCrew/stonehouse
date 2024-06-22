@@ -169,6 +169,7 @@ export const init_map = (init, save_location) => {
             handler: ( ev ) => housed.parentNode.classList.toggle('show-houses')
         })
 
+
         const btns_edits = housed.querySelectorAll('.btn.edit')
         const btns_save = housed.querySelectorAll('.btn.save')
         const btns_delets = housed.querySelectorAll('.btn.delete')
