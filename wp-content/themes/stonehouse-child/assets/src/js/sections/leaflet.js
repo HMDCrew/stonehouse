@@ -189,6 +189,7 @@ export const init_map = (init, save_location) => {
         })
 
         const btns_edits = housed.querySelectorAll('.btn.edit')
+        const btns_save = housed.querySelectorAll('.btn.save')
         const btns_delets = housed.querySelectorAll('.btn.delete')
 
 
@@ -249,7 +250,12 @@ export const init_map = (init, save_location) => {
 
         }
 
+        const save_house = ( btn, house_item ) => {
+
+        }
+
         btns_edits.forEach( btn => btn.addEventListener( 'click', ev => edit_house( btn, btn.closest('.house') ) ) )
         btns_delets.forEach( btn => btn.addEventListener( 'click', ev => delete_house( btn, btn.closest('.house') ) ) )
+        btns_save.forEach( btn => btn.addEventListener( 'click', ev => save_house( btn, btn.closest('.house') ) ) )
     }
 }
