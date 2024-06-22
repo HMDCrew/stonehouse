@@ -215,7 +215,6 @@ export const init_map = (init, save_location) => {
         map.addEventListener('contextmenu', e => e.preventDefault())
     }
 
-
     L.Control.Watermark = L.Control.extend({
         onAdd: (map) => {
 
@@ -227,7 +226,13 @@ export const init_map = (init, save_location) => {
             img.classList.add('my-houses')
 
             img.addEventListener('click', ev => {
+
                 console.log('test')
+
+                document.querySelector('.housed').parentNode.classList.toggle('show-houses')
+
+                // map.invalidateSize()
+
             }, false)
 
             return img
