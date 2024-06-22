@@ -140,7 +140,7 @@ export const init_map = (init, save_location) => {
 
         timerId = setTimeout(() => {
 
-            if (!mouse_has_moved) {
+            if ( ! mouse_has_moved ) {
                 set_marker(map, e.latlng, save_location)
             }
         }, 800)
@@ -207,7 +207,6 @@ export const init_map = (init, save_location) => {
             const lat = info.querySelector('.lat span')
             const lng = info.querySelector('.lng span')
 
-
             if ( !info.classList.contains('lock_hover') ) {
                 title.setAttribute('contenteditable', true)
                 lat.setAttribute('contenteditable', true)
@@ -218,7 +217,6 @@ export const init_map = (init, save_location) => {
                 lat.removeAttribute('contenteditable', true)
                 lng.removeAttribute('contenteditable', true)
             }
-
 
             // save d-none
             info.classList.toggle('lock_hover')
@@ -242,7 +240,9 @@ export const init_map = (init, save_location) => {
 
                 res = JSON.parse(res)
 
-                console.log(res)
+                if ( res.status === 'success' ) {
+                    house_item.remove()
+                }
             })
         }
 
@@ -271,7 +271,9 @@ export const init_map = (init, save_location) => {
 
                 res = JSON.parse(res)
 
-                console.log(res)
+                if ( res.status === 'success' ) {
+                    deactivate_old_house_edit()
+                }
             })
         }
 

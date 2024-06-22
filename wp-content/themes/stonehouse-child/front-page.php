@@ -33,27 +33,12 @@ get_header();
 					<div id="mini-map"></div>
 				</div>
 				<div class="housed">
-					<?php
-						$houses = new WP_Query(
-							array(
-								'post_type'   => 'house',
-								'author' 	  => get_current_user_id(),
-								'post_status' => array('publish', 'pending', 'draft', 'future', 'private', 'inherit', 'trash')    
-							)
-						);
 
-						if ( ! empty( $houses->posts ) ) {
+					<?php foreach ( stonehouse_get_locations() as $post ) : ?>
 
-							foreach ( $houses->posts as $post ) {
+						<?php get_template_part( 'template-parts/house', 'item', $post ); ?>
 
-								get_template_part( 'template-parts/house', 'item', array(
-										'house' => $post, 
-										'location' => get_post_meta( $post->ID , 'location', true )
-									) 
-								);
-							}
-						}
-					?>
+					<?php endforeach; ?>
 				</div>
 			</div>
 		</div>

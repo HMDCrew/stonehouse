@@ -1,18 +1,19 @@
 <?php
 list(
-    'house' => $house,
-    'location' => $location
+    'id'       => $id,
+    'location' => $location,
+    'title'    => $title
 ) = $args;
 ?>
 
-<div class="house" house-id="<?php echo $house->ID; ?>">
+<div class="house" house-id="<?php echo $id; ?>">
 	<div class="info-container d-flex align-center">
         <svg fill="#000000" width="20px" height="100%" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
             <path d="M23.505 0c0.271 0 0.549 0.107 0.757 0.316 0.417 0.417 0.417 1.098 0 1.515l-14.258 14.264 14.050 14.050c0.417 0.417 0.417 1.098 0 1.515s-1.098 0.417-1.515 0l-14.807-14.807c-0.417-0.417-0.417-1.098 0-1.515l15.015-15.022c0.208-0.208 0.486-0.316 0.757-0.316z"></path>
         </svg>
 
         <div class="info">
-            <div class="title"><?php echo $house->post_title; ?></div>
+            <div class="title"><?php echo $title; ?></div>
             <div class="location">
                 <div class="lat" lat="<?php echo $location['lat'] ?>">lat: <span><?php echo $location['lat'] ?></span></div>
                 <div class="lng" lng="<?php echo $location['lng'] ?>">lng: <span><?php echo $location['lng'] ?></span></div>

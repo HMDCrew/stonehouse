@@ -106,9 +106,10 @@ function assets_js_front_end() {
 		'stonehouse',
 		'stonehouse_data',
 		array(
-			'json_url' => get_rest_url(),
-			'user_id'  => get_current_user_id(),
-			'nonce'    => wp_create_nonce( 'wp_rest' ),
+			'json_url'  => get_rest_url(),
+			'user_id'   => get_current_user_id(),
+			'nonce'     => wp_create_nonce( 'wp_rest' ),
+			'locations' => stonehouse_get_locations(),
 		)
 	);
 

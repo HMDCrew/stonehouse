@@ -1,6 +1,8 @@
 import { init_map } from "./leaflet"
 import { sendHttpReq } from "../utils/api"
 
+console.log(stonehouse_data)
+
 new Promise(async (resolve) => {
 
     const response = await fetch('https://ip-geo-location.p.rapidapi.com/ip/check?format=json&language=en', {
