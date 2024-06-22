@@ -98,8 +98,8 @@
         }
 
         .my-houses {
-            width: 19px;
-            height: 18px;
+            width: 34px;
+            height: 34px;
             padding: 6px 5.5px;
             background-color: white;
 
@@ -149,10 +149,6 @@
             align-items: center;
             margin-bottom: 16px;
 
-            &:last-child {
-                margin-bottom: 0;
-            }
-
             .title {
                 font-size: 20px;
                 font-weight: 500;
@@ -175,6 +171,58 @@
                 display: flex;
                 align-items: center;
                 justify-content: center;
+
+                .btn {
+                    cursor: pointer;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    margin: 4px 2px;
+                    line-height: 24px;
+                    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+                }
+                
+                .edit {
+                    background-color: #0d6efd;
+
+                    &:hover {
+                        background-color: #0b5ed7;
+                    }
+                }
+
+                .delete {
+                    background-color: #dc3545;
+
+                    &:hover {
+                        background-color: #bb2d3b;
+                    }
+                }
+
+
+                svg {
+                    path {
+                        stroke: white;
+                    }
+                }
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            .info-container {
+                cursor: pointer;
+
+                svg {
+                    width: 0;
+                    transition: all .3s;
+                }
+                
+                &:hover {
+                    svg {
+                        width: 20px;
+                        margin-right: 12px;
+                    }
+                }
             }
         }
     }
