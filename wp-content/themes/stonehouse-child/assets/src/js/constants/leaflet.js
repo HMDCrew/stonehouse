@@ -26,7 +26,7 @@ export const leaflet = {
     roards: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png",
     selected: "topografica",
 
-    stonemap: (init) => L.map('stonemap', {
+    bigMap: (init) => L.map('stonemap', {
         center: L.latLng(init.latitude || 0, init.longitude || 0),
         zoom: 14,
         minZoom: 3,

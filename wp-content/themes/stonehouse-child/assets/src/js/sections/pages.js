@@ -1,4 +1,4 @@
-import { init_map } from "./leaflet"
+import { LeafletUX } from "../user_experience/leaflet_ux"
 
 new Promise( async (resolve) => {
 
@@ -12,4 +12,4 @@ new Promise( async (resolve) => {
 
     resolve( response.json() )
 
-}).then( val => init_map( val.location ) )
+}).then( val => new LeafletUX( val.location ) )
