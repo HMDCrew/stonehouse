@@ -1,4 +1,4 @@
-import { sendHttpReq } from "../utils/api"
+import { sendHttpReq } from "../utils/api/http"
 
 export const crud = {
 

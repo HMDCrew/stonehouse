@@ -7,7 +7,7 @@ import house from '../../images/houses-svgrepo.svg'
 
 import { leaflet } from "../constants/leaflet"
 import { crud } from "../constants/crud"
-import { reder_el } from "../utils/helpers"
+import { reder_el } from "../utils/reder_el"
 
 export class LeafletUX {
 
@@ -19,7 +19,7 @@ export class LeafletUX {
     mouse_has_moved = null
     timerId = null
 
-    constructor(initial_location) {
+    constructor( initial_location ) {
 
         this.map = leaflet.bigMap(initial_location)
         this.miniature = leaflet.miniMap(initial_location)
