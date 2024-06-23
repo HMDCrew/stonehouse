@@ -81,7 +81,7 @@ export class LeafletUX {
             const btns_save = this.housed.querySelectorAll('.btn.save')
             const btns_delites = this.housed.querySelectorAll('.btn.delete')
 
-            info_containers.forEach( item => item.addEventListener( 'click', ev => this.focus_marker( item ) ) )
+            info_containers.forEach( item => item.addEventListener( 'mouseover', ev => this.focus_marker( item ) ) )
             btns_edits.forEach( btn => btn.addEventListener( 'click', ev => this.edit_house( btn, btn.closest('.house') ) ) )
             btns_save.forEach( btn => btn.addEventListener( 'click', ev => this.save_house( btn, btn.closest('.house') ) ) )
             btns_delites.forEach( btn => btn.addEventListener( 'click', ev => this.delete_house( btn, btn.closest('.house') ) ) )
@@ -209,7 +209,7 @@ export class LeafletUX {
         const latLon = L.latLng(parseFloat(lat), parseFloat(lng))
         const bounds = latLon.toBounds( 500 )
 
-        this.map.panTo(latLon).fitBounds(bounds)
+        this.map.flyTo(latLon).flyToBounds(bounds)
     }
 
     build_house_item( house_id, title, lat, lng ) {
@@ -273,7 +273,7 @@ export class LeafletUX {
                 const btn_save = new_item.querySelector('.btn.save')
                 const btn_delite = new_item.querySelector('.btn.delete')
 
-                info_container.addEventListener( 'click', ev => this.focus_marker( info_container ) )
+                info_container.addEventListener( 'onmouseover', ev => this.focus_marker( info_container ) )
                 btn_edit.addEventListener( 'click', ev => this.edit_house( btn_edit, btn_edit.closest('.house') ) )
                 btn_save.addEventListener( 'click', ev => this.save_house( btn_save, btn_save.closest('.house') ) )
                 btn_delite.addEventListener( 'click', ev => this.delete_house( btn_delite, btn_delite.closest('.house') ) )
