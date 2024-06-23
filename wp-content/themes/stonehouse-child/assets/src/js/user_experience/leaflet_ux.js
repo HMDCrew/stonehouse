@@ -3,12 +3,17 @@ import "leaflet.locatecontrol/dist/L.Control.Locate.min.css"
 import L from "leaflet"
 import 'leaflet/dist/leaflet.css'
 
+import "leaflet.markercluster/dist/leaflet.markercluster"
+import "leaflet.markercluster/dist/MarkerCluster.css"
+import "leaflet.markercluster/dist/MarkerCluster.Default.css"
+
 import house from '../../images/houses-svgrepo.svg'
 
 import { leaflet } from "../constants/leaflet"
 import { crud } from "../constants/crud"
 import { reder_el } from "../utils/reder_el"
 import { createElementFromHTML } from "../utils/dom_from_string"
+
 
 export class LeafletUX {
 
@@ -20,7 +25,6 @@ export class LeafletUX {
     mouse_has_moved = null
     timerId = null
 
-    saved_markers = []
     editing_my_coordiate = false
 
     constructor( initial_location ) {
@@ -36,6 +40,8 @@ export class LeafletUX {
             geografica: leaflet.geografica,
             roards: leaflet.roards
         })
+
+        this.markers = new L.MarkerClusterGroup()
 
         this.my_location_control()
 
@@ -62,6 +68,7 @@ export class LeafletUX {
         }
 
         this.init()
+        this.map.addLayer(this.markers)
     }
 
     init() {
@@ -95,11 +102,11 @@ export class LeafletUX {
         // Add existing Markers on map
         if( stonehouse_data.locations.length ) {
 
-            stonehouse_data.locations.forEach(async post => {
+            stonehouse_data.locations.forEach( post => {
 
                 const marker = L.marker(post.location, { icon: leaflet.marker }).addTo(this.map)
-                marker._icon.classList.add('success')
-                this.saved_markers.push(marker)
+                marker._icon.querySelector('svg').classList.add('success')
+                this.markers.addLayer( marker )
             })
         }
     }
@@ -193,13 +200,13 @@ export class LeafletUX {
                 const lat = house_item.querySelector('.lat').getAttribute('lat')
                 const lng = house_item.querySelector('.lng').getAttribute('lng')
 
-                this.saved_markers.forEach(marker => {
+                this.markers.getLayers().forEach(marker => {
 
                     if (
                         parseFloat(lat) === marker._latlng.lat &&
                         parseFloat(lng) === marker._latlng.lng
                     ) {
-                        marker.remove()
+                        this.markers.removeLayer(marker);
                     }
                 })
 
@@ -218,7 +225,7 @@ export class LeafletUX {
 
         this.map.flyTo(latLon).flyToBounds(bounds)
 
-        if( this.editing_my_coordiate ) {
+        if ( this.editing_my_coordiate ) {
             const house = item.closest('.house')
             this.edit_house( house.querySelector('.btn.edit'), house )
         }
@@ -275,8 +282,8 @@ export class LeafletUX {
 
                 this.position_marker.remove()
                 const marker = L.marker(latlng, { icon: leaflet.marker }).addTo(this.map)
-                marker._icon.classList.add('success')
-                this.saved_markers.push(marker)
+                marker._icon.querySelector('svg').classList.add('success')
+                this.markers.addLayer( marker )
 
                 const new_item = this.build_house_item(res.message.id, res.message.title, res.message.location.lat, res.message.location.lng)
 

@@ -37,6 +37,7 @@
     "leaflet": "^1.9.4",
     "leaflet-providers": "^2.0.0",
     "leaflet.locatecontrol": "^0.81.1",
+    "leaflet.markercluster": "^1.5.3",
     "postcss-loader": "^7.0.1",
     "sass": "^1.54.4",
     "sass-loader": "^13.0.2",

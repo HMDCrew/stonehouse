@@ -18,19 +18,15 @@
             }
         }
 
-        &.error {
-            svg {
-                .dark-marker-part {
-                    fill: #dc3545
-                }
+        .error {
+            .dark-marker-part {
+                fill: #dc3545
             }
         }
 
-        &.success {
-            svg {
-                .dark-marker-part {
-                    fill: #5cb85c
-                }
+        .success {
+            .dark-marker-part {
+                fill: #5cb85c
             }
         }
     }
