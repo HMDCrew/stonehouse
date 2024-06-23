@@ -24,7 +24,9 @@ if ( ! function_exists( 'stonehouse_get_locations' ) ) {
 			array(
 				'post_type'   => 'house',
 				'author' 	  => get_current_user_id(),
-				'post_status' => array( 'publish', 'pending', 'draft', 'future', 'private', 'inherit' )
+				'post_status' => array( 'publish', 'pending', 'draft', 'future', 'private', 'inherit' ),
+				'orderby'     => 'date',
+				'order'       => 'DESC',
 			)
 		);
 

@@ -105,7 +105,7 @@ if ( ! class_exists( 'HOMES_API_ROUTES' ) ) :
 
 				if ( ! empty( $location ) ) {
 
-					$house_args = array(
+					$location_args = array(
 						'post_title'  => sprintf( 'new house in lat: %f, lng: %f', $location['lat'], $location['lng'] ),
 						'post_author' => $user_id,
 						'post_type'   => 'house',
@@ -116,15 +116,20 @@ if ( ! class_exists( 'HOMES_API_ROUTES' ) ) :
 							)
 						),
 					);
-	
-					$product_id = wp_insert_post( $house_args );
+
+					$location_id = wp_insert_post( $location_args );
 				}
 
 				wp_send_json(
 					array(
 						'status'  => 'success',
 						'message' => array(
-							$location['lat'], $location['lng']
+							'id'       => $location_id,
+							'title'    => $location_args['post_title'],
+							'location' => array(
+								'lat' => $location['lat'],
+								'lng' => $location['lng']
+							),
 						),
 					),
 				);
@@ -172,6 +177,7 @@ if ( ! class_exists( 'HOMES_API_ROUTES' ) ) :
 					array(
 						'status'  => 'success',
 						'message' => array(
+							'id'       => $house_id,
 							'title'    => $title,
 							'location' => array(
 								'lat'  => $location['lat'],
