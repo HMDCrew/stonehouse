@@ -175,7 +175,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 16px;
+            padding: 30px 0;
 
             .info-container {
 
@@ -211,7 +211,7 @@
 
                     .title,
                     .location {
-                        margin-bottom: 25px;
+                        margin: 25px;
                     }
 
                     .title,
@@ -309,7 +309,7 @@
 
         .housed {
             transition: all .3s;
-            padding: 16px;
+            padding: 0 16px;
             right: 0;
         }
     }

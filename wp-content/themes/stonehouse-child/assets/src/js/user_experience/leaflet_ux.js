@@ -21,6 +21,7 @@ export class LeafletUX {
     timerId = null
 
     saved_markers = []
+    editing_my_coordiate = false
 
     constructor( initial_location ) {
 
@@ -81,7 +82,11 @@ export class LeafletUX {
             const btns_save = this.housed.querySelectorAll('.btn.save')
             const btns_delites = this.housed.querySelectorAll('.btn.delete')
 
-            info_containers.forEach( item => item.addEventListener( 'mouseover', ev => this.focus_marker( item ) ) )
+            info_containers.forEach( item => {
+                item.addEventListener( 'mouseover', ev => !this.editing_my_coordiate && this.focus_marker( item ) )
+                item.addEventListener( 'click', ev => this.focus_marker( item ) )
+            })
+
             btns_edits.forEach( btn => btn.addEventListener( 'click', ev => this.edit_house( btn, btn.closest('.house') ) ) )
             btns_save.forEach( btn => btn.addEventListener( 'click', ev => this.save_house( btn, btn.closest('.house') ) ) )
             btns_delites.forEach( btn => btn.addEventListener( 'click', ev => this.delete_house( btn, btn.closest('.house') ) ) )
@@ -124,6 +129,7 @@ export class LeafletUX {
 
     edit_house( btn, house_item ) {
 
+        this.editing_my_coordiate = true
         this.deactivate_old_house_edit()
 
         const info = house_item.querySelector('.info-container')
@@ -165,6 +171,7 @@ export class LeafletUX {
             lng: lng.getAttribute('lng')
         }).then(res => {
 
+            this.editing_my_coordiate = false
             res = JSON.parse(res)
 
             if ( res.status === 'success' ) {
@@ -210,6 +217,11 @@ export class LeafletUX {
         const bounds = latLon.toBounds( 500 )
 
         this.map.flyTo(latLon).flyToBounds(bounds)
+
+        if( this.editing_my_coordiate ) {
+            const house = item.closest('.house')
+            this.edit_house( house.querySelector('.btn.edit'), house )
+        }
     }
 
     build_house_item( house_id, title, lat, lng ) {
@@ -273,7 +285,8 @@ export class LeafletUX {
                 const btn_save = new_item.querySelector('.btn.save')
                 const btn_delite = new_item.querySelector('.btn.delete')
 
-                info_container.addEventListener( 'onmouseover', ev => this.focus_marker( info_container ) )
+                info_container.addEventListener( 'onmouseover', ev => !this.editing_my_coordiate && this.focus_marker( info_container ) )
+                info_container.addEventListener( 'click', ev => this.focus_marker( info_container ) )
                 btn_edit.addEventListener( 'click', ev => this.edit_house( btn_edit, btn_edit.closest('.house') ) )
                 btn_save.addEventListener( 'click', ev => this.save_house( btn_save, btn_save.closest('.house') ) )
                 btn_delite.addEventListener( 'click', ev => this.delete_house( btn_delite, btn_delite.closest('.house') ) )
