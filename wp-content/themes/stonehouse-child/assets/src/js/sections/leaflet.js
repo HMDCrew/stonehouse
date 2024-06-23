@@ -7,12 +7,13 @@ import { reder_el } from "../utils/helpers"
 import house from '../../images/houses-svgrepo.svg'
 import { leaflet } from "../constants/leaflet"
 import { sendHttpReq } from "../utils/api"
+import { crud } from "../constants/crud"
 
 let point_marker
 let position_marker
 let popup
 
-const popup_marker_content = (map, save_location, latlng) => {
+const popup_marker_content = (map, latlng) => {
 
     const popup_content = reder_el('span', ['text-center', 'popup-items'])
     const button = reder_el( 'button', ['btn', 'btn-add-house'], leaflet.save_point_map )
@@ -27,17 +28,16 @@ const popup_marker_content = (map, save_location, latlng) => {
         button.classList.add('loading')
         save_label.append(loading_dots)
 
-        new Promise( ( resolve ) => resolve( save_location( latlng ) ) ).then(
-            () => {
-                loading_dots.remove()
-                save_label.textContent = 'Saved'
-                button.classList.remove('loading')
-                button.classList.add('loaded')
-                position_marker.remove()
+        crud.create_location( latlng ).then( res => {
 
-                L.marker(latlng, { icon: leaflet.saved_marker }).addTo(map)
-            }
-        )
+            loading_dots.remove()
+            save_label.textContent = 'Saved'
+            button.classList.remove('loading')
+            button.classList.add('loaded')
+            position_marker.remove()
+
+            L.marker(latlng, { icon: leaflet.saved_marker }).addTo(map)
+        })
     }, false)
 
     popup_content.append(button)
@@ -45,7 +45,7 @@ const popup_marker_content = (map, save_location, latlng) => {
     return popup_content
 }
 
-const set_marker = (map, latlng, popup_event) => {
+const set_marker = (map, latlng) => {
 
     position_marker ? position_marker.remove() : ''
     position_marker = L.marker(latlng, { icon: leaflet.marker }).addTo(map)
@@ -56,24 +56,24 @@ const set_marker = (map, latlng, popup_event) => {
     popup = L.popup(latlng, {
         offset: { x: 0, y: -50 },
         closeOnClick: false,
-        content: popup_marker_content(map, popup_event, latlng),
+        content: popup_marker_content(map, latlng),
     }).openOn(map)
 
     position_marker.on('click', ev => popup.openOn(map))
 }
 
 let location_accurency = []
-const location_found = (e, map, save_location) => {
+const location_found = (e, map) => {
 
     if (location_accurency.filter((location) => location.lat === e.latlng.lat && location.lng === e.latlng.lng).length === 0) {
 
-        set_marker(map, e.latlng, save_location)
+        set_marker(map, e.latlng)
         location_accurency.push({ lat: e.latlng.lat, lng: e.latlng.lng })
     }
 }
 
 
-const map_controlls = (map, save_location) => {
+const map_controlls = (map) => {
 
     map.addControl(
         L.control.locate({
@@ -84,7 +84,7 @@ const map_controlls = (map, save_location) => {
         })
     )
 
-    map.on('locationfound', ev => location_found(ev, map, save_location));
+    map.on('locationfound', ev => location_found(ev, map));
 }
 
 
@@ -113,7 +113,7 @@ const switch_maps = (layers) => {
 }
 
 
-export const init_map = (init, save_location) => {
+export const init_map = (init) => {
 
     const map = leaflet.stonemap(init)
     const miniature = leaflet.miniMap(init)
@@ -125,7 +125,7 @@ export const init_map = (init, save_location) => {
         geografica: leaflet.geografica,
         roards: leaflet.roards
     })
-    map_controlls(map, save_location)
+    map_controlls(map)
 
     map.on('zoom', (e) => update_miniature_map(e, miniature))
     map.on('moveend', (e) => update_miniature_map(e, miniature))
@@ -141,7 +141,7 @@ export const init_map = (init, save_location) => {
         timerId = setTimeout(() => {
 
             if ( ! mouse_has_moved ) {
-                set_marker(map, e.latlng, save_location)
+                set_marker(map, e.latlng)
             }
         }, 800)
 
@@ -153,7 +153,7 @@ export const init_map = (init, save_location) => {
 
     // contextmenu is mobile version of ( mousedown, mousemove, mouseup )
     if ( 'ontouchstart' in document.documentElement ) {
-        map.on('contextmenu', (e) => set_marker(map, e.latlng, save_location))
+        map.on('contextmenu', (e) => set_marker(map, e.latlng))
     } else {
         map.addEventListener('contextmenu', e => e.preventDefault())
     }
@@ -230,14 +230,7 @@ export const init_map = (init, save_location) => {
 
             const house_id = house_item.getAttribute('house-id')
 
-            sendHttpReq({
-                url: stonehouse_data.json_url + 'delete-house',
-                data: { house_id },
-                method: 'POST',
-                headers: {
-                    'X-WP-Nonce': stonehouse_data.nonce
-                },
-            }).then(res => {
+            crud.delete_location({house_id}).then(res => {
 
                 res = JSON.parse(res)
 
@@ -249,25 +242,17 @@ export const init_map = (init, save_location) => {
 
         const save_house = ( btn, house_item ) => {
 
+            
             const house_id = house_item.getAttribute('house-id')
             const title = house_item.querySelector('.title')
             const lat = house_item.querySelector('.lat')
             const lng = house_item.querySelector('.lng')
-
-            sendHttpReq({
-                url: stonehouse_data.json_url + 'update-house',
-                data: {
-                    house_id,
-                    title: title.textContent,
-                    location: {
-                        lat: lat.getAttribute('lat'),
-                        lng: lng.getAttribute('lng')
-                    }
-                },
-                method: 'POST',
-                headers: {
-                    'X-WP-Nonce': stonehouse_data.nonce
-                },
+            
+            crud.update_location({
+                house_id,
+                title: title.textContent,
+                lat: lat.getAttribute('lat'),
+                lng: lng.getAttribute('lng')
             }).then(res => {
 
                 res = JSON.parse(res)
