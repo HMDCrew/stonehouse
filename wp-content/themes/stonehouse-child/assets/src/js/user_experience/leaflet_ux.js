@@ -70,13 +70,18 @@ export class LeafletUX {
             leaflet.addController({
                 map: this.map,
                 icon: house,
-                handler: ev => this.housed.parentNode.classList.toggle('show-houses')
+                handler: ev => {
+                    this.housed.parentNode.classList.toggle('show-houses')
+                    this.map.invalidateSize()
+                }
             })
 
+            const info_containers = this.housed.querySelectorAll('.info-container')
             const btns_edits = this.housed.querySelectorAll('.btn.edit')
             const btns_save = this.housed.querySelectorAll('.btn.save')
             const btns_delites = this.housed.querySelectorAll('.btn.delete')
 
+            info_containers.forEach( item => item.addEventListener( 'click', ev => this.focus_marker( item ) ) )
             btns_edits.forEach( btn => btn.addEventListener( 'click', ev => this.edit_house( btn, btn.closest('.house') ) ) )
             btns_save.forEach( btn => btn.addEventListener( 'click', ev => this.save_house( btn, btn.closest('.house') ) ) )
             btns_delites.forEach( btn => btn.addEventListener( 'click', ev => this.delete_house( btn, btn.closest('.house') ) ) )
@@ -196,6 +201,17 @@ export class LeafletUX {
         })
     }
 
+    focus_marker( item ) {
+
+        const lat = item.querySelector('.lat').getAttribute('lat')
+        const lng = item.querySelector('.lng').getAttribute('lng')
+
+        const latLon = L.latLng(parseFloat(lat), parseFloat(lng))
+        const bounds = latLon.toBounds( 500 )
+
+        this.map.panTo(latLon).fitBounds(bounds)
+    }
+
     build_house_item( house_id, title, lat, lng ) {
         return createElementFromHTML(
             `<div class="house" house-id="${house_id}">
@@ -252,10 +268,12 @@ export class LeafletUX {
 
                 const new_item = this.build_house_item(res.message.id, res.message.title, res.message.location.lat, res.message.location.lng)
 
+                const info_container = new_item.querySelector('.info-container')
                 const btn_edit = new_item.querySelector('.btn.edit')
                 const btn_save = new_item.querySelector('.btn.save')
                 const btn_delite = new_item.querySelector('.btn.delete')
 
+                info_container.addEventListener( 'click', ev => this.focus_marker( info_container ) )
                 btn_edit.addEventListener( 'click', ev => this.edit_house( btn_edit, btn_edit.closest('.house') ) )
                 btn_save.addEventListener( 'click', ev => this.save_house( btn_save, btn_save.closest('.house') ) )
                 btn_delite.addEventListener( 'click', ev => this.delete_house( btn_delite, btn_delite.closest('.house') ) )

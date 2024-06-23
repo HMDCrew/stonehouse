@@ -303,8 +303,8 @@
     
     &.show-houses {
 
-        #mini-map {
-            right: calc( 15px + 50% );
+        .map {
+            width: 50%;
         }
 
         .housed {
