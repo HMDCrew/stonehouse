@@ -68,7 +68,6 @@ export class LeafletUX {
         }
 
         this.init()
-        this.map.addLayer(this.markers)
     }
 
     init() {
@@ -100,15 +99,16 @@ export class LeafletUX {
         }
 
         // Add existing Markers on map
-        if( stonehouse_data.locations.length ) {
+        if ( stonehouse_data.locations.length ) {
 
             stonehouse_data.locations.forEach( post => {
 
-                const marker = L.marker(post.location, { icon: leaflet.marker }).addTo(this.map)
-                marker._icon.querySelector('svg').classList.add('success')
+                const marker = L.marker(post.location, { icon: leaflet.marker_success })
                 this.markers.addLayer( marker )
             })
         }
+
+        this.map.addLayer(this.markers)
     }
 
     deactivate_old_house_edit() {
@@ -281,8 +281,7 @@ export class LeafletUX {
                 btn.classList.add('loaded')
 
                 this.position_marker.remove()
-                const marker = L.marker(latlng, { icon: leaflet.marker }).addTo(this.map)
-                marker._icon.querySelector('svg').classList.add('success')
+                const marker = L.marker(latlng, { icon: leaflet.marker_success })
                 this.markers.addLayer( marker )
 
                 const new_item = this.build_house_item(res.message.id, res.message.title, res.message.location.lat, res.message.location.lng)
@@ -305,7 +304,9 @@ export class LeafletUX {
                 btn.classList.remove('loading')
                 btn.classList.add('error')
 
-                this.position_marker._icon.classList.add('error')
+                this.position_marker.remove()
+                /* const marker = */ L.marker(latlng, { icon: leaflet.marker_error }).addTo(this.map)
+                // this.markers.addLayer( marker )
             }
         })
     }
@@ -346,7 +347,7 @@ export class LeafletUX {
 
         if (this.location_accurency.filter((location) => location.lat === e.latlng.lat && location.lng === e.latlng.lng).length === 0) {
     
-            set_marker( e.latlng )
+            this.set_marker( e.latlng )
             this.location_accurency.push({ lat: e.latlng.lat, lng: e.latlng.lng })
         }
     }

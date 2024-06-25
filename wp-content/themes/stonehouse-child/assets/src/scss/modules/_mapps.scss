@@ -7,30 +7,6 @@
         position: relative;
     }
 
-    .leaflet-marker-icon {
-        svg {
-            .light-marker-part {
-                fill: #fff;
-                filter: drop-shadow(0 21px 20px rgba(0, 0, 0, .2));
-            }
-            .dark-marker-part {
-                fill: #464646
-            }
-        }
-
-        .error {
-            .dark-marker-part {
-                fill: #dc3545
-            }
-        }
-
-        .success {
-            .dark-marker-part {
-                fill: #5cb85c
-            }
-        }
-    }
-
     #stonemap {
         height: 80vh;
         outline: 0 !important;
