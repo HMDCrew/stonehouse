@@ -7,6 +7,9 @@ import "leaflet.markercluster/dist/leaflet.markercluster"
 import "leaflet.markercluster/dist/MarkerCluster.css"
 import "leaflet.markercluster/dist/MarkerCluster.Default.css"
 
+import "leaflet-routing-machine/dist/leaflet-routing-machine.min.js"
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css"
+
 import house from '../../images/houses-svgrepo.svg'
 
 import { leaflet } from "../constants/leaflet"
@@ -18,6 +21,7 @@ import { createElementFromHTML } from "../utils/dom_from_string"
 export class LeafletUX {
 
     position_marker = null
+    my_position_marker = null
     point_marker = null
     popup = null
     location_accurency = []
@@ -31,7 +35,7 @@ export class LeafletUX {
 
         this.map = leaflet.bigMap(initial_location)
         this.miniature = leaflet.miniMap(initial_location)
-        this.housed = document.querySelector('.housed')
+        this.details = document.querySelector('.details')
 
         this.layers = leaflet.initLayers({
             map: this.map,
@@ -68,25 +72,39 @@ export class LeafletUX {
         }
 
         this.init()
+
+        L.Routing.control({
+            router: L.Routing.mapbox(
+                'pk.eyJ1...',
+                {
+                    profile: "mapbox/walking",
+                    // polylinePrecision: 6
+                }
+            ),
+            waypoints: [
+              L.latLng(57.74, 11.94),
+              L.latLng(57.6792, 11.949)
+            ]
+          }).addTo(this.map);
     }
 
     init() {
 
-        if( this.housed ) {
+        if( this.details ) {
 
             leaflet.addController({
                 map: this.map,
                 icon: house,
                 handler: ev => {
-                    this.housed.parentNode.classList.toggle('show-houses')
+                    this.details.parentNode.classList.toggle('show-houses')
                     this.map.invalidateSize()
                 }
             })
 
-            const info_containers = this.housed.querySelectorAll('.info-container')
-            const btns_edits = this.housed.querySelectorAll('.btn.edit')
-            const btns_save = this.housed.querySelectorAll('.btn.save')
-            const btns_delites = this.housed.querySelectorAll('.btn.delete')
+            const info_containers = this.details.querySelectorAll('.info-container')
+            const btns_edits = this.details.querySelectorAll('.btn.edit')
+            const btns_save = this.details.querySelectorAll('.btn.save')
+            const btns_delites = this.details.querySelectorAll('.btn.delete')
 
             info_containers.forEach( item => {
                 item.addEventListener( 'mouseover', ev => !this.editing_my_coordiate && this.focus_marker( item ) )
@@ -103,7 +121,7 @@ export class LeafletUX {
 
             stonehouse_data.locations.forEach( post => {
 
-                const marker = L.marker(post.location, { icon: leaflet.marker_success })
+                const marker = L.marker(post.location, { icon: leaflet.marker_success }).on('click', ev => console.log(ev.latlng))
                 this.markers.addLayer( marker )
             })
         }
@@ -172,7 +190,7 @@ export class LeafletUX {
         const lng = house_item.querySelector('.lng')
 
         crud.update_location({
-            house_id,
+            house_id: parseInt( house_id ),
             title: title.textContent,
             lat: lat.getAttribute('lat'),
             lng: lng.getAttribute('lng')
@@ -291,13 +309,13 @@ export class LeafletUX {
                 const btn_save = new_item.querySelector('.btn.save')
                 const btn_delite = new_item.querySelector('.btn.delete')
 
-                info_container.addEventListener( 'onmouseover', ev => !this.editing_my_coordiate && this.focus_marker( info_container ) )
+                info_container.addEventListener( 'mouseover', ev => !this.editing_my_coordiate && this.focus_marker( info_container ) )
                 info_container.addEventListener( 'click', ev => this.focus_marker( info_container ) )
                 btn_edit.addEventListener( 'click', ev => this.edit_house( btn_edit, btn_edit.closest('.house') ) )
                 btn_save.addEventListener( 'click', ev => this.save_house( btn_save, btn_save.closest('.house') ) )
                 btn_delite.addEventListener( 'click', ev => this.delete_house( btn_delite, btn_delite.closest('.house') ) )
 
-                this.housed.prepend(new_item)
+                this.details.prepend(new_item)
             } else {
 
                 save_label.textContent = 'Error'
@@ -335,10 +353,9 @@ export class LeafletUX {
 
             this.position_marker && this.position_marker.remove()
             this.point_marker && this.point_marker.remove()
-
         })
 
-        this.position_marker = L.marker(latlng, { icon: leaflet.marker }).addTo(this.map)
+        this.position_marker = L.marker(latlng, { icon: leaflet.marker }).on('click', ev => console.log(ev.latlng)).addTo(this.map)
         this.point_marker = L.marker( latlng, { icon: leaflet.point_marker }).addTo(this.map)
     }
 
@@ -346,8 +363,10 @@ export class LeafletUX {
     my_location_found( e ) {
 
         if (this.location_accurency.filter((location) => location.lat === e.latlng.lat && location.lng === e.latlng.lng).length === 0) {
-    
-            this.set_marker( e.latlng )
+
+            this.my_position_marker = e.latlng
+
+            L.marker( e.latlng, { icon: leaflet.point_marker }).addTo(this.map)
             this.location_accurency.push({ lat: e.latlng.lat, lng: e.latlng.lng })
         }
     }

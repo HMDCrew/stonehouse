@@ -192,6 +192,14 @@ if ( ! class_exists( 'HOMES_API_ROUTES' ) ) :
 				array(
 					'status'  => 'error',
 					'message' => 'is not possible update this house',
+					'test' => array(
+						'user_id'     => $user_id,
+						'title'       => $params,
+						'house_id'    => $house_id,
+						'post_author' => get_post_field( 'post_author', $house_id ),
+						'param'       => $request->get_query_params(),
+						'has_valid'   => $request->has_valid_params()
+					)
 				),
 			);
 		}
