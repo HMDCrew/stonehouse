@@ -43,15 +43,5 @@ get_header();
 			</div>
 		</div>
 	</main><!-- #main -->
-
-	<!--
-	<form action="https://geodati.gov.it/geoportale/templates/rndt/advancedSearch//services-advancedSearch.php" method="POST">
-
-		<input type="text" style="width: 100%;" value="http://192.168.3.30:8080/geoportalRNDTPA/rest/find/document?start=1&max=15&geometryType=esriGeometryBox&searchText=apiso.Type:(dataset OR series)&spatialRel=all&f=json" name="GPT_REST_URL_SERVER" />
-		<input type="text" style="width: 100%;" value="http://192.168.3.30:8080/geoportalRNDTPA/rest/find/document" name="url" />
-
-		<button type="submit">submit</button>
-	</form>
-	-->
 <?php
 get_footer();
