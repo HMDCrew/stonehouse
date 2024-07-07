@@ -11,6 +11,9 @@ import "leaflet-routing-machine/dist/leaflet-routing-machine.min.js"
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css"
 
 import house from '../../images/houses-svgrepo.svg'
+import walking from '../../images/walking.svg'
+import cycling from '../../images/cycling.svg'
+import car from '../../images/car.svg'
 
 import { leaflet } from "../constants/leaflet"
 import { crud } from "../constants/crud"
@@ -22,6 +25,7 @@ export class LeafletUX {
 
     position_marker = null
     my_position_marker = null
+    router_controller = null
     point_marker = null
     popup = null
     location_accurency = []
@@ -72,20 +76,72 @@ export class LeafletUX {
         }
 
         this.init()
+    }
 
-        L.Routing.control({
-            router: L.Routing.mapbox(
-                'pk.eyJ1...',
-                {
-                    profile: "mapbox/walking",
-                    // polylinePrecision: 6
-                }
-            ),
-            waypoints: [
-              L.latLng(57.74, 11.94),
-              L.latLng(57.6792, 11.949)
-            ]
-          }).addTo(this.map);
+    build_routeing_path( latlng, profile ) {
+
+        this.map.locate({ setView: true })
+
+        const my_position_loaded = (state) => {
+
+            if( this.my_position_marker ) {
+            
+                console.log(latlng, this.my_position_marker)
+
+                this.router_controller && this.router_controller.remove()
+
+                this.router_controller = L.Routing.control({
+                    router: L.Routing.mapbox(
+                        'pk.eyJ1...',
+                        {
+                            profile: profile,
+                            // polylinePrecision: 6
+                        }
+                    ),
+                    routeWhileDragging: false,
+                    routeDragInterval: 5000,
+
+                    draggableWaypoints: false,
+                    
+                    addWaypoints: false,
+                    extendToWaypoints: true,
+                    missingRouteTolerance: 10,
+                    
+                    lineOptions: {
+                        addWaypoints: false
+                    },
+                    createMarker: function() { return null; },
+
+                    waypoints: [
+                        this.my_position_marker,
+                        latlng
+                    ]
+                }).addTo(this.map)
+
+                clearInterval(state)
+            }
+
+        }
+        const interval_state = setInterval( () => my_position_loaded( interval_state ), 100 )
+    }
+
+
+    build_router_popup_marker(latlng) {
+
+        const btn_walking = reder_el( 'button', ['btn', 'btn-routing', 'btn-walking'], `<img src="${walking}" />` )
+        const btn_cycling = reder_el( 'button', ['btn', 'btn-routing', 'btn-cycling'], `<img src="${cycling}" />` )
+        const btn_car = reder_el( 'button', ['btn', 'btn-routing', 'btn-car'], `<img src="${car}" />` )
+
+        btn_walking.addEventListener('click', ev => this.build_routeing_path( latlng, 'mapbox/walking' ), false)
+        btn_cycling.addEventListener('click', ev => this.build_routeing_path( latlng, 'mapbox/cycling' ), false)
+        btn_car.addEventListener('click', ev => this.build_routeing_path( latlng, 'mapbox/driving-traffic' ), false)
+
+        const popup_content = reder_el('span', ['text-center', 'routing-items'])
+        popup_content.append(btn_walking)
+        popup_content.append(btn_cycling)
+        popup_content.append(btn_car)
+
+        return popup_content
     }
 
     init() {
@@ -121,7 +177,9 @@ export class LeafletUX {
 
             stonehouse_data.locations.forEach( post => {
 
-                const marker = L.marker(post.location, { icon: leaflet.marker_success }).on('click', ev => console.log(ev.latlng))
+                const latlng = new L.LatLng(post.location.lat, post.location.lng)
+
+                const marker = L.marker(latlng, { icon: leaflet.marker_success }).on('click', ev => this.set_popup( latlng, this.build_router_popup_marker(latlng) ))
                 this.markers.addLayer( marker )
             })
         }
@@ -299,7 +357,7 @@ export class LeafletUX {
                 btn.classList.add('loaded')
 
                 this.position_marker.remove()
-                const marker = L.marker(latlng, { icon: leaflet.marker_success })
+                const marker = L.marker(latlng, { icon: leaflet.marker_success }).on('click', ev => this.set_popup( latlng, this.build_router_popup_marker(latlng) ))
                 this.markers.addLayer( marker )
 
                 const new_item = this.build_house_item(res.message.id, res.message.title, res.message.location.lat, res.message.location.lng)
@@ -329,7 +387,7 @@ export class LeafletUX {
         })
     }
 
-    build_popup_marker( latlng ) {
+    build_save_popup_marker( latlng ) {
 
         const button = reder_el( 'button', ['btn', 'btn-add-house'], leaflet.save_point_map )
         button.addEventListener('click', ev => this.handle_create_location( button, latlng ), false)
@@ -340,28 +398,40 @@ export class LeafletUX {
         return popup_content
     }
 
+    set_popup( latlng, content, on_remove = null ) {
+
+        this.popup = L.popup(latlng, {
+            offset: { x: 0, y: -50 },
+            closeOnClick: false,
+            content: content,
+        }).openOn(this.map).on('remove', ev => {
+            on_remove && on_remove(ev)
+        })
+    }
+
     set_marker( latlng ) {
 
         this.position_marker && this.position_marker.remove()
         this.point_marker && this.point_marker.remove()
 
-        this.popup = L.popup(latlng, {
-            offset: { x: 0, y: -50 },
-            closeOnClick: false,
-            content: this.build_popup_marker(latlng),
-        }).openOn(this.map).on('remove', () => {
+        this.set_popup(
+            latlng,
+            this.build_save_popup_marker(latlng),
+            () => {
 
-            this.position_marker && this.position_marker.remove()
-            this.point_marker && this.point_marker.remove()
-        })
+                this.position_marker && this.position_marker.remove()
+                this.point_marker && this.point_marker.remove()
+            }
+        )
 
-        this.position_marker = L.marker(latlng, { icon: leaflet.marker }).on('click', ev => console.log(ev.latlng)).addTo(this.map)
+        this.position_marker = L.marker(latlng, { icon: leaflet.marker }).addTo(this.map)
         this.point_marker = L.marker( latlng, { icon: leaflet.point_marker }).addTo(this.map)
     }
 
 
     my_location_found( e ) {
 
+        // fix provider location found (bug iliad milano and france location bug)
         if (this.location_accurency.filter((location) => location.lat === e.latlng.lat && location.lng === e.latlng.lng).length === 0) {
 
             this.my_position_marker = e.latlng
@@ -378,7 +448,7 @@ export class LeafletUX {
                 locateOptions: { maxZoom: 10, enableHighAccuracy: true }
             })
         )
-    
+
         this.map.on('locationfound', ev => this.my_location_found(ev))
     }
 

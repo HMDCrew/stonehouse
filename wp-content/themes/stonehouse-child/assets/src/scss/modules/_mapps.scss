@@ -80,6 +80,22 @@
                         }
                     }
                 }
+
+                .routing-items {
+                    display: flex;
+                    justify-content: space-around;
+                    padding: 0px 6px;
+
+                    .btn-routing {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+
+                        img {
+                            width: 30px;
+                        }
+                    }
+                }
             }
     
             .leaflet-popup-close-button {
