@@ -40,8 +40,13 @@ get_header();
 
 					<?php endforeach; ?>
 				</div>
+
+				<button type="button" class="btn focus-location">start navigation</button>
 			</div>
 		</div>
 	</main><!-- #main -->
+
+	<div id="map3D"></div>
+
 <?php
 get_footer();

@@ -15,6 +15,7 @@ import walking from '../../images/walking.svg'
 import cycling from '../../images/cycling.svg'
 import car from '../../images/car.svg'
 
+import { MAP3D } from "./3d_map"
 import { leaflet } from "../constants/leaflet"
 import { crud } from "../constants/crud"
 import { reder_el } from "../utils/reder_el"
@@ -76,17 +77,19 @@ export class LeafletUX {
         }
 
         this.init()
+
+        new MAP3D(L, this.map, this.layers.map);
     }
 
     build_routeing_path( latlng, profile ) {
 
-        this.map.locate({ setView: true })
+        this.map.locate({ setView: false })
 
         const my_position_loaded = (state) => {
 
             if( this.my_position_marker ) {
             
-                console.log(latlng, this.my_position_marker)
+                // console.log(latlng, this.my_position_marker)
 
                 this.router_controller && this.router_controller.remove()
 
@@ -116,6 +119,11 @@ export class LeafletUX {
                         this.my_position_marker,
                         latlng
                     ]
+                }).on('routeselected',(e) => {
+
+                    const bounds = this.my_position_marker.toBounds( 500 )
+                    this.map.flyTo(this.my_position_marker).flyToBounds(bounds)
+
                 }).addTo(this.map)
 
                 clearInterval(state)
@@ -296,7 +304,7 @@ export class LeafletUX {
         const lat = item.querySelector('.lat').getAttribute('lat')
         const lng = item.querySelector('.lng').getAttribute('lng')
 
-        const latLon = L.latLng(parseFloat(lat), parseFloat(lng))
+        const latLon = new L.LatLng(parseFloat(lat), parseFloat(lng))
         const bounds = latLon.toBounds( 500 )
 
         this.map.flyTo(latLon).flyToBounds(bounds)
