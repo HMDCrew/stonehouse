@@ -6,11 +6,11 @@
  */
 
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-
 
 const SRC_DIR = path.resolve(__dirname, 'src');
 const JS_DIR = path.resolve(__dirname, 'src/js');
@@ -61,7 +61,12 @@ const plugins = (argv) => [
     new MiniCssExtractPlugin({
         filename: 'css/[name].bundle.css'
     }),
+
+    new Dotenv({
+        path: '.env',
+    }),
 ];
+
 
 module.exports = (env, argv) => ({
 
@@ -95,5 +100,5 @@ module.exports = (env, argv) => ({
         ]
     },
 
-    plugins: plugins(argv),
+    plugins: plugins(argv)
 });

@@ -95,7 +95,7 @@ export class LeafletUX {
 
                 this.router_controller = L.Routing.control({
                     router: L.Routing.mapbox(
-                        'pk.eyJ1...',
+                        process.env.ROUTING_MAPBOX,
                         {
                             profile: profile,
                             // polylinePrecision: 6
