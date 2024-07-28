@@ -47,6 +47,6 @@ get_header();
 	</main><!-- #main -->
 
 	<div id="map3D"></div>
-
+	<div id="map" style="position: fixed; visibility:hidden; width: 1000px; height:500px;"></div>
 <?php
 get_footer();

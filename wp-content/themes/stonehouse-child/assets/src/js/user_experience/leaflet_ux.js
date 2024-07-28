@@ -78,7 +78,7 @@ export class LeafletUX {
 
         this.init()
 
-        new MAP3D(L, this.map, this.layers.map);
+        // new MAP3D(L, this.map, this.layers.map);
     }
 
     build_routeing_path( latlng, profile ) {
@@ -187,7 +187,10 @@ export class LeafletUX {
 
                 const latlng = new L.LatLng(post.location.lat, post.location.lng)
 
-                const marker = L.marker(latlng, { icon: leaflet.marker_success }).on('click', ev => this.set_popup( latlng, this.build_router_popup_marker(latlng) ))
+                const marker = L.marker(latlng, { icon: leaflet.marker_success }).on('click', ev => {
+                    this.set_popup( latlng, this.build_router_popup_marker(latlng) )
+                    console.log(latlng)
+                })
                 this.markers.addLayer( marker )
             })
         }
