@@ -86,4 +86,5 @@
 // import { MAP_3D } from "../user_experience/threejs_infinite_plane"
 // new MAP_3D()
 
-import '../user_experience/tests'
+//import '../user_experience/tests'
+import '../user_experience/test2.js'
