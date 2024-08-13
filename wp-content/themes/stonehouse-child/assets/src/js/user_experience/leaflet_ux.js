@@ -15,12 +15,10 @@ import walking from '../../images/walking.svg'
 import cycling from '../../images/cycling.svg'
 import car from '../../images/car.svg'
 
-import { MAP3D } from "./3d_map"
 import { leaflet } from "../constants/leaflet"
 import { crud } from "../constants/crud"
 import { reder_el } from "../utils/reder_el"
 import { createElementFromHTML } from "../utils/dom_from_string"
-
 
 export class LeafletUX {
 
@@ -77,8 +75,6 @@ export class LeafletUX {
         }
 
         this.init()
-
-        // new MAP3D(L, this.map, this.layers.map);
     }
 
     build_routeing_path( latlng, profile ) {
