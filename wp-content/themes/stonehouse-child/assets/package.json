@@ -34,20 +34,16 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
-    "3d-tiles-renderer": "^0.3.35",
     "dotenv-webpack": "^8.1.0",
     "leaflet": "^1.9.4",
     "leaflet-providers": "^2.0.0",
     "leaflet-routing-machine": "^3.2.12",
     "leaflet.locatecontrol": "^0.81.1",
     "leaflet.markercluster": "^1.5.3",
-    "ol": "^10.0.0",
     "postcss-loader": "^7.0.1",
     "sass": "^1.54.4",
     "sass-loader": "^13.0.2",
     "stream": "^0.0.3",
-    "style-loader": "^3.3.1",
-    "three": "^0.166.1",
-    "three-noise": "^1.1.2"
+    "style-loader": "^3.3.1"
   }
 }
