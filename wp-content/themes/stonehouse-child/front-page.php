@@ -45,10 +45,5 @@ get_header();
 			</div>
 		</div>
 	</main><!-- #main -->
-
-	<div id="map3D"></div>
-	<div id="map" style="position: fixed; visibility:hidden; width: 1000px; height:500px;"></div>
-	<div id="container"></div>
-	<div id="blocker"></div>
 <?php
 get_footer();
